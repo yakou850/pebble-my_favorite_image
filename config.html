@@ -12,18 +12,6 @@
 <p><input type="submit" id="b-cancel" value="cancel"></input></p>
 </form>
 <script type="text/javascript">
-var submitButton = document.getElementById('b-save');
-submitButton.addEventListener('click', function() {
-  // Some example configuration values
-  var config = {
-    'animSetting': true,
-    'tickSetting': 'seconds',
-    'bgColor': 'red'
-  };
-
-  // Return data to watchapp
-  location.href = 'pebblejs://close#' 
-  // + encodeURIComponent(JSON.stringify(config));
-});
+location.href = 'pebblejs://close#success';
 </script>
 </html>
