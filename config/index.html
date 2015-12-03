@@ -25,7 +25,7 @@
       <div class='item-container-header'>Image URL</div>
       <div class='item-container-content'>
         <label class='item'>
-          <textarea id='image_url_list' rows="10"></textarea>
+          <input type="tex" id='image_url_1'>
         </label>
       </div>
       <div class='item-container-footer'>
@@ -41,14 +41,14 @@
   </body>
   <script>
   function getConfigData() {
-    var imageUrlList = document.getElementById('image_url_list');
+    var image_url_1 = document.getElementById('image_url_1');
  
     var options = {
-      'imageURL': imageUrlList.value
+      'imageURL1': image_url_1.value
     };
 
     // Save for next launch
-    localStorage['image_url_list'] = imageUrlList.value;
+    localStorage['imageURL1'] = image_url_1.value;
 
     console.log('Got options: ' + JSON.stringify(options));
     return options;
@@ -76,11 +76,11 @@
   });
 
   (function() {
-    var imageUrlList = document.getElementById('image_url_list');
+    var image_url_1 = document.getElementById('image_url_1');
 
     // Load any previously saved configuration, if available
-    if(localStorage['image_url_list']) {
-      imageUrlList.value = localStorage['image_url_list'];
+    if(localStorage['imageURL1']) {
+      image_url_1.value = localStorage['imageURL1'];
     }
   })();
   </script>
