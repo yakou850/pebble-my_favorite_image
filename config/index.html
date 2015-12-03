@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-  <title>Slate Example Configuration</title>
+  <title>My favorite image watchface setting</title>
   <link rel='stylesheet' type='text/css' href='css/slate.css'>
   <script src='js/slate.js'></script>
   <style>
@@ -18,7 +18,7 @@
   </head>
 
   <body>
-    <h1 class='title'>Slate Example Configuration</h1>
+    <h1 class='title'>My favorite image watchface setting</h1>
 
     <div class='item-container'>
       <div class='item-container-content'>
@@ -29,28 +29,15 @@
     </div>
 
     <div class='item-container'>
-      <div class='item-container-header'>Customizability</div>
+      <div class='item-container-header'>Image URL</div>
       <div class='item-container-content'>
         <label class='item'>
-          Background Color
-          <input id='background_color_picker' type='text' class='item-color item-color-sunny' value='#000000'>
+          #1
+          <input id='image_url_1' type='text' class='item-color item-color-sunny' value='#000000'>
         </label>
       </div>
       <div class='item-container-footer'>
-        Choose the app's background color. Used if High Contrast Mode is not selected. Note: Only available on Basalt watches that support many colors.
-      </div>
-    </div>
-
-    <div class='item-container'>
-      <div class='item-container-header'>Accessibility</div>
-      <div class='item-container-content'>
-        <label class='item'>
-          High Contrast Mode
-          <input id='high_contrast_checkbox' type='checkbox' class='item-toggle'>
-        </label>
-      </div>
-      <div class='item-container-footer'>
-        This switches the app colors to a higher contrast set that promotes readability in low light.
+        Input URL(PNG, under 20KB, but all is not supported :<) 
       </div>
     </div>
 
@@ -62,17 +49,14 @@
   </body>
   <script>
   function getConfigData() {
-    var backgroundColorPicker = document.getElementById('background_color_picker');
-    var highContrastCheckbox = document.getElementById('high_contrast_checkbox');
+    var imageUrl1 = document.getElementById('image_url_1');
  
     var options = {
-      'background_color': backgroundColorPicker.value,
-      'high_contrast': highContrastCheckbox.checked
+      'imageURL': imageUrl1
     };
 
     // Save for next launch
-    localStorage['background_color'] = options['background_color'];
-    localStorage['high_contrast'] = options['high_contrast'];
+    localStorage['imageUrl'] = options['imageURL'];
 
     console.log('Got options: ' + JSON.stringify(options));
     return options;
@@ -100,13 +84,11 @@
   });
 
   (function() {
-    var backgroundColorPicker = document.getElementById('background_color_picker');
-    var highContrastCheckbox = document.getElementById('high_contrast_checkbox');
+    var imageUrl1 = document.getElementById('image_url_1');
 
     // Load any previously saved configuration, if available
-    if(localStorage['high_contrast']) {
-      highContrastCheckbox.checked = JSON.parse(localStorage['high_contrast']);
-      backgroundColorPicker.value = localStorage['background_color'];
+    if(localStorage['imageUrl']) {
+      imageUrl1.value = localStorage['imageUrl'];
     }
   })();
   </script>
