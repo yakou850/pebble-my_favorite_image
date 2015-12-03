@@ -4,6 +4,7 @@
   <title>My favorite image watchface setting</title>
   <link rel='stylesheet' type='text/css' href='css/slate.css'>
   <script src='js/slate.js'></script>
+  <script src='js/jquery.min.js'></script>
   <style>
   .title {
     padding: 15px 10px;
@@ -24,8 +25,7 @@
       <div class='item-container-header'>Image URL</div>
       <div class='item-container-content'>
         <label class='item'>
-          #1
-          <input id='image_url_1' type='text'>
+          <textarea id='image_url_list'></textarea>
         </label>
       </div>
       <div class='item-container-footer'>
@@ -41,14 +41,14 @@
   </body>
   <script>
   function getConfigData() {
-    var imageUrl1 = document.getElementById('image_url_1');
+    var imageUrlList = document.getElementById('image_url_list');
  
     var options = {
-      'imageURL': imageUrl1.value
+      'imageURL': imageUrlList.value.split(/\r\n|\r|\n/)
     };
 
     // Save for next launch
-    localStorage['imageUrl'] = options['imageURL'];
+    localStorage['image_url_list'] = imageUrlList.value;
 
     console.log('Got options: ' + JSON.stringify(options));
     return options;
@@ -76,11 +76,11 @@
   });
 
   (function() {
-    var imageUrl1 = document.getElementById('image_url_1');
+    var imageUrlList = document.getElementById('image_url_list');
 
     // Load any previously saved configuration, if available
-    if(localStorage['imageUrl']) {
-      imageUrl1.value = localStorage['imageUrl'];
+    if(localStorage['image_url_list']) {
+      imageUrlList.value = localStorage['image_url_list'];
     }
   })();
   </script>
