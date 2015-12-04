@@ -4,7 +4,7 @@
 // BEGIN AUTO-GENERATED UI CODE; DO NOT MODIFY
 static Window *s_window;
 static GFont s_res_gothic_14;
-static GFont s_res_gothic_28_bold;
+static GFont s_res_font_clock;
 static BitmapLayer *image_layer;
 static TextLayer *day_layer;
 static TextLayer *weekday_layer;
@@ -19,33 +19,37 @@ static void initialise_ui(void) {
 	window_set_background_color(s_window, GColorCyan);
 	#endif
 
-	s_res_gothic_14 = fonts_get_system_font(FONT_KEY_GOTHIC_14);
-	s_res_gothic_28_bold = fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD);
+	s_res_gothic_14 = fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);
+	#ifdef PBL_PLATFORM_APLITE
+	s_res_font_clock = fonts_get_system_font(FONT_KEY_BITHAM_34_MEDIUM_NUMBERS);
+	#else
+	s_res_font_clock = fonts_get_system_font(FONT_KEY_LECO_32_BOLD_NUMBERS);
+	#endif
 	// image_layer
 	image_layer = bitmap_layer_create(GRect(7, 1, 130, 130));
 	bitmap_layer_set_background_color(image_layer, GColorBlack);
 	layer_add_child(window_get_root_layer(s_window), (Layer *)image_layer);
 
 	// day_layer
-	day_layer = text_layer_create(GRect(5, 144, 32, 14));
+	day_layer = text_layer_create(GRect(5, 126, 45, 18));
 	text_layer_set_background_color(day_layer, GColorClear);
 	text_layer_set_text(day_layer, "12/03");
 	text_layer_set_font(day_layer, s_res_gothic_14);
 	layer_add_child(window_get_root_layer(s_window), (Layer *)day_layer);
 
 	// weekday_layer
-	weekday_layer = text_layer_create(GRect(40, 144, 23, 14));
+	weekday_layer = text_layer_create(GRect(7, 142, 23, 18));
 	text_layer_set_background_color(weekday_layer, GColorClear);
 	text_layer_set_text(weekday_layer, "Tue");
 	text_layer_set_font(weekday_layer, s_res_gothic_14);
 	layer_add_child(window_get_root_layer(s_window), (Layer *)weekday_layer);
 
 	// clock_layer
-	clock_layer = text_layer_create(GRect(85, 130, 51, 28));
+	clock_layer = text_layer_create(GRect(35, 125, 100, 40));
 	text_layer_set_background_color(clock_layer, GColorClear);
 	text_layer_set_text(clock_layer, "00:00");
 	text_layer_set_text_alignment(clock_layer, GTextAlignmentRight);
-	text_layer_set_font(clock_layer, s_res_gothic_28_bold);
+	text_layer_set_font(clock_layer, s_res_font_clock);
 	layer_add_child(window_get_root_layer(s_window), (Layer *)clock_layer);
 }
 
