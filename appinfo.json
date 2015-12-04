@@ -1,5 +1,7 @@
 {
     "appKeys": {
+        "DATA_KEY": 850,
+        "KEY_IMAGE_URL_1": 1000,
         "NETDL_BEGIN": 1768777473,
         "NETDL_CHUNK_SIZE": 1768777475,
         "NETDL_DATA": 1768777472,
@@ -20,8 +22,7 @@
     "shortName": "MyFavImg",
     "targetPlatforms": [
         "aplite",
-        "basalt",
-        "chalk"
+        "basalt"
     ],
     "uuid": "c5fdb967-3128-4989-9280-80ea46797815",
     "versionLabel": "1.0",

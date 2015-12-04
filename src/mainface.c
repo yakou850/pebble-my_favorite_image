@@ -22,7 +22,7 @@ static void initialise_ui(void) {
 	s_res_gothic_14 = fonts_get_system_font(FONT_KEY_GOTHIC_14);
 	s_res_gothic_28_bold = fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD);
 	// image_layer
-	image_layer = bitmap_layer_create(GRect(2, 1, 140, 140));
+	image_layer = bitmap_layer_create(GRect(7, 1, 130, 130));
 	bitmap_layer_set_background_color(image_layer, GColorBlack);
 	layer_add_child(window_get_root_layer(s_window), (Layer *)image_layer);
 
@@ -41,7 +41,7 @@ static void initialise_ui(void) {
 	layer_add_child(window_get_root_layer(s_window), (Layer *)weekday_layer);
 
 	// clock_layer
-	clock_layer = text_layer_create(GRect(85, 137, 51, 28));
+	clock_layer = text_layer_create(GRect(85, 130, 51, 28));
 	text_layer_set_background_color(clock_layer, GColorClear);
 	text_layer_set_text(clock_layer, "00:00");
 	text_layer_set_text_alignment(clock_layer, GTextAlignmentRight);

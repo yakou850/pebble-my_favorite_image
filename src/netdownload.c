@@ -2,7 +2,7 @@
 
 #define MIN(a,b)  ((a) < (b) ? (a) : (b))
 
-NetDownloadContext* netdownload_create_context(NetDownloadCallback callback, NetDownloadCallback2 callback_ready, NetDownloadCallback2 callback_error) {
+NetDownloadContext* netdownload_create_context(NetDownloadCallback callback, NetDownloadCallback2 callback_ready, NetDownloadCallback2 callback_error, NetDownloadCallback3 callback_set_image_url) {
 	NetDownloadContext *ctx = malloc(sizeof(NetDownloadContext));
 
 	ctx->length = 0;
@@ -11,6 +11,7 @@ NetDownloadContext* netdownload_create_context(NetDownloadCallback callback, Net
 	ctx->callback = callback;
 	ctx->callback_ready = callback_ready;
 	ctx->callback_error = callback_error;
+	ctx->callback_set_image_url = callback_set_image_url;
 
 	return ctx;
 }
@@ -22,8 +23,8 @@ void netdownload_destroy_context(NetDownloadContext *ctx) {
 	free(ctx);
 }
 
-void netdownload_initialize(NetDownloadCallback callback, NetDownloadCallback callback_ready, NetDownloadCallback callback_error) {
-	NetDownloadContext *ctx = netdownload_create_context(callback, callback_ready, callback_error);
+void netdownload_initialize(NetDownloadCallback callback, NetDownloadCallback callback_ready, NetDownloadCallback callback_error, NetDownloadCallback3 callback_set_image_url) {
+	NetDownloadContext *ctx = netdownload_create_context(callback, callback_ready, callback_error, callback_set_image_url);
 	APP_LOG(APP_LOG_LEVEL_DEBUG, "NetDownloadContext = %p", ctx);
 	app_message_set_context(ctx);
 
@@ -43,6 +44,8 @@ void netdownload_deinitialize() {
 }
 
 void netdownload_request(char *url) {
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "download = %s", url);
+
 	DictionaryIterator *outbox;
 	app_message_outbox_begin(&outbox);
 	// Tell the javascript how big we want each chunk of data:
@@ -120,6 +123,10 @@ void netdownload_receive(DictionaryIterator *iter, void *context) {
 		break;
 		case NETDL_READY:
 		ctx->callback_ready();
+		break;
+		case KEY_IMAGE_URL_1:
+		printf("Get string: %s", tuple->value->cstring);
+		ctx->callback_set_image_url(tuple->value->cstring, 1);
 		break;
 		default:
 		APP_LOG(APP_LOG_LEVEL_WARNING, "Unknown key in dict: %lu", tuple->key);

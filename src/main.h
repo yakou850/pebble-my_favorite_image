@@ -1,21 +1,48 @@
 #pragma once
 #include "netdownload.h"
 #include "mainface.h"
+#include <string.h>
 #ifdef PBL_PLATFORM_APLITE
 #include "png.h"
 #endif
 
+#define DATA_KEY 850
+#define DATA_SIZE 849
+
 static Window *window;
 static GBitmap *current_bmp;
-
-static unsigned long image = 0;
-
+static char *images[] = {"","","","",""};
 void show_next_image();
 void show_error_image();
+
+void set_image_url(char *data, uint number) {
+	strcpy(images[number], data);
+}
 
 static void window_load(Window *window) {
 	current_bmp = NULL;
 	show_mainface();
+}
+
+void read_config() {
+	char url[500];
+	uint i = 0;
+	uint size = persist_read_int(DATA_SIZE);
+	for (i = 0; i < size; i++) {
+		persist_read_string(DATA_KEY + i, url, sizeof(url));
+		set_image_url(url, i);
+		printf("%d: %s read", i, images[i]);
+	}
+}
+
+void write_config() {
+	uint i = 0;
+	for (i = 0; i < sizeof(images)/sizeof(char*); i++) {
+		persist_write_string(DATA_KEY + i, images[i]);
+		printf("%d: %s write", i, images[i]);
+	}
+	persist_write_int(DATA_SIZE, sizeof(images)/sizeof(char*));
+	
 }
 
 static void window_unload(Window *window) {
@@ -61,10 +88,12 @@ void download_error_handler() {
 	APP_LOG(APP_LOG_LEVEL_DEBUG, "download image error");
 }
 
+void set_image_url_handler(char *data, uint number);
+
 static void init(void) {
 	// Need to initialize this first to make sure it is there when
 	// the window_load function is called by window_stack_push.
-	netdownload_initialize(download_complete_handler, download_ready_handler, download_error_handler);
+	netdownload_initialize(download_complete_handler, download_ready_handler, download_error_handler, set_image_url_handler);
 
 	window = window_create();
 	#ifdef PBL_SDK_2
@@ -76,11 +105,13 @@ static void init(void) {
 	});
 	const bool animated = true;
 	window_stack_push(window, animated);
+	read_config();
 }
 
 static void deinit(void) {
 	netdownload_deinitialize(); // call this to avoid 20B memory leak
 	window_destroy(window);
+	write_config();
 }
 
 int main(void) {

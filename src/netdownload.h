@@ -14,6 +14,8 @@
 
 #define NETDL_READY NETDL_DATA + 5
 
+#define KEY_IMAGE_URL_1 1000
+
 typedef struct {
 	/* We keep a pointer to the data so we can free it later. */
 	uint8_t*  data;
@@ -23,6 +25,7 @@ typedef struct {
 
 typedef void (*NetDownloadCallback)(NetDownload *image);
 typedef void (*NetDownloadCallback2)();
+typedef void (*NetDownloadCallback3)(char *data, uint number);
 
 typedef struct {
 	/* size of the data buffer allocated */
@@ -34,9 +37,10 @@ typedef struct {
 	NetDownloadCallback2 callback_ready;
 	NetDownloadCallback callback;
 	NetDownloadCallback2 callback_error;
+	NetDownloadCallback3 callback_set_image_url;
 } NetDownloadContext;
 
-NetDownloadContext* netdownload_create_context(NetDownloadCallback callback, NetDownloadCallback2 callback_ready, NetDownloadCallback2 callback_error);
+NetDownloadContext* netdownload_create_context(NetDownloadCallback callback, NetDownloadCallback2 callback_ready, NetDownloadCallback2 callback_error, NetDownloadCallback3 callback_set_image_url);
 
 void netdownload_initialize();
 void netdownload_deinitialize();

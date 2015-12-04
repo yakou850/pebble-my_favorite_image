@@ -5,6 +5,28 @@ Pebble.addEventListener("ready", function(e) {
 	Pebble.sendAppMessage({"NETDL_READY": "done" }, function(){}, function(){}); 
 });
 
+Pebble.addEventListener('showConfiguration', function(e) {
+  // Show config page
+  Pebble.openURL('http://yakou850.github.io/pebble-my_favorite_image/config/');
+});
+ 
+Pebble.addEventListener('webviewclosed', function(e) {
+  var configData = JSON.parse(decodeURIComponent(e.response));
+  console.log('Configuration page returned: ' + JSON.stringify(configData));
+
+  var imageURL1 = configData['imageURL1'];
+
+  var dict = {};
+    dict['KEY_IMAGE_URL_1'] = imageURL1;
+
+  // Send to watchapp
+  Pebble.sendAppMessage(dict, function() {
+    console.log('Send successful: ' + JSON.stringify(dict));
+  }, function() {
+    console.log('Send failed!');
+  });
+});
+
 Pebble.addEventListener("appmessage", function(e) {
   console.log("Got message: " + JSON.stringify(e));
 
