@@ -32,8 +32,10 @@ void show_error_image() {
 }
 
 void set_image_url_handler(char *data, uint number) {
-	printf("Get string: %s", data);
+	printf("Get string(%d): %s", number, data);
 	set_image_url(data, number);
-	write_config();
-	show_next_image();
+	if (number == 0) {
+		image = 0;
+		show_next_image();
+	}
 }

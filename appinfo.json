@@ -1,7 +1,10 @@
 {
     "appKeys": {
-        "DATA_KEY": 850,
-        "KEY_IMAGE_URL_1": 1000,
+        "KEY_IMAGE_URL1": 1001,
+        "KEY_IMAGE_URL2": 1002,
+        "KEY_IMAGE_URL3": 1003,
+        "KEY_IMAGE_URL4": 1004,
+        "KEY_IMAGE_URL5": 1005,
         "NETDL_BEGIN": 1768777473,
         "NETDL_CHUNK_SIZE": 1768777475,
         "NETDL_DATA": 1768777472,

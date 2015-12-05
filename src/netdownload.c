@@ -70,6 +70,19 @@ void netdownload_destroy(NetDownload *image) {
 void netdownload_receive(DictionaryIterator *iter, void *context) {
 	NetDownloadContext *ctx = (NetDownloadContext*) context;
 
+	Tuple *url1 = dict_find(iter, KEY_IMAGE_URL1);
+	Tuple *url2 = dict_find(iter, KEY_IMAGE_URL2);
+	Tuple *url3 = dict_find(iter, KEY_IMAGE_URL3);
+	Tuple *url4 = dict_find(iter, KEY_IMAGE_URL4);
+	Tuple *url5 = dict_find(iter, KEY_IMAGE_URL5);
+	if(url1 && url2 && url3 && url4 && url5) {
+		ctx->callback_set_image_url(url1->value->cstring, 0);
+		ctx->callback_set_image_url(url2->value->cstring, 1);
+		ctx->callback_set_image_url(url3->value->cstring, 2);
+		ctx->callback_set_image_url(url4->value->cstring, 3);
+		ctx->callback_set_image_url(url5->value->cstring, 4);
+		return;
+	}
 	Tuple *tuple = dict_read_first(iter);
 	if (!tuple) {
 		APP_LOG(APP_LOG_LEVEL_ERROR, "Got a message with no first key! Size of message: %li", (uint32_t)iter->end - (uint32_t)iter->dictionary);
@@ -123,10 +136,6 @@ void netdownload_receive(DictionaryIterator *iter, void *context) {
 		break;
 		case NETDL_READY:
 		ctx->callback_ready();
-		break;
-		case KEY_IMAGE_URL_1:
-		printf("Get string: %s", tuple->value->cstring);
-		ctx->callback_set_image_url(tuple->value->cstring, 1);
 		break;
 		default:
 		APP_LOG(APP_LOG_LEVEL_WARNING, "Unknown key in dict: %lu", tuple->key);
