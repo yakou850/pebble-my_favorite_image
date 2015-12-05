@@ -16,6 +16,7 @@ void show_next_image();
 void show_error_image();
 
 void set_image_url(char *data, uint number) {
+	images[number] = malloc(sizeof(data));
 	strcpy(images[number], data);
 }
 
@@ -25,13 +26,19 @@ static void window_load(Window *window) {
 }
 
 void read_config() {
-	char url[500];
+	char *url;
 	uint i = 0;
 	uint size = persist_read_int(DATA_SIZE);
+	int size_string;
+
 	for (i = 0; i < size; i++) {
-		persist_read_string(DATA_KEY + i, url, sizeof(url));
-		set_image_url(url, i);
-		printf("%d: %s read", i, images[i]);
+		if (persist_exists(DATA_KEY + i)) {
+			size_string = persist_get_size(DATA_KEY + i);
+			url = malloc(size_string);
+			persist_read_string(DATA_KEY + i, url, size_string);
+			set_image_url(url, i);
+			printf("%d: %s read", i, images[i]);
+		}		
 	}
 }
 
@@ -42,7 +49,7 @@ void write_config() {
 		printf("%d: %s write", i, images[i]);
 	}
 	persist_write_int(DATA_SIZE, sizeof(images)/sizeof(char*));
-	
+
 }
 
 static void window_unload(Window *window) {
