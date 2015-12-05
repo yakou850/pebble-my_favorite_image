@@ -11,13 +11,13 @@
 
 static Window *window;
 static GBitmap *current_bmp;
-static char *images[] = {"","","","",""};
+static char *image = "";
 void show_next_image();
 void show_error_image();
+static bool isReady = false;
 
 void set_image_url(char *data, uint number) {
-	images[number] = malloc(sizeof(data));
-	strcpy(images[number], data);
+	strcpy(image, data);
 }
 
 static void window_load(Window *window) {
@@ -27,28 +27,22 @@ static void window_load(Window *window) {
 
 void read_config() {
 	char *url;
-	uint i = 0;
-	uint size = persist_read_int(DATA_SIZE);
 	int size_string;
 
-	for (i = 0; i < size; i++) {
-		if (persist_exists(DATA_KEY + i)) {
-			size_string = persist_get_size(DATA_KEY + i);
-			url = malloc(size_string);
-			persist_read_string(DATA_KEY + i, url, size_string);
-			set_image_url(url, i);
-			printf("%d: %s read", i, images[i]);
-		}		
-	}
+	if (persist_exists(DATA_KEY)) {
+		size_string = persist_get_size(DATA_KEY);
+		url = malloc(size_string);
+		persist_read_string(DATA_KEY, url, size_string);
+		set_image_url(url, 0);
+		printf("%s read", image);
+	}		
+
 }
 
 void write_config() {
 	uint i = 0;
-	for (i = 0; i < sizeof(images)/sizeof(char*); i++) {
-		persist_write_string(DATA_KEY + i, images[i]);
-		printf("%d: %s write", i, images[i]);
-	}
-	persist_write_int(DATA_SIZE, sizeof(images)/sizeof(char*));
+	persist_write_string(DATA_KEY, image);
+	printf("%s write", image);
 
 }
 
@@ -86,6 +80,7 @@ void download_complete_handler(NetDownload *download) {
 }
 
 void download_ready_handler() {
+	isReady = true;
 	show_next_image();
 	APP_LOG(APP_LOG_LEVEL_DEBUG, "will show image");
 }

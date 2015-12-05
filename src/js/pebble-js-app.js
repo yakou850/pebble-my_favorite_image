@@ -14,10 +14,8 @@ Pebble.addEventListener('webviewclosed', function(e) {
   var configData = JSON.parse(decodeURIComponent(e.response));
   console.log('Configuration page returned: ' + JSON.stringify(configData));
 
-  var imageURL1 = configData['imageURL1'];
-
   var dict = {};
-    dict['KEY_IMAGE_URL_1'] = imageURL1;
+    dict['KEY_IMAGE_URL_1'] = configData['imageURL1'];
 
   // Send to watchapp
   Pebble.sendAppMessage(dict, function() {
