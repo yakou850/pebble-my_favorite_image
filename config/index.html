@@ -1,87 +1,126 @@
 <!DOCTYPE html>
 <html>
-  <head>
-  <title>My favorite image watchface setting</title>
-  <link rel='stylesheet' type='text/css' href='css/slate.css'>
-  <script src='js/slate.js'></script>
-  <script src='js/jquery.min.js'></script>
-  <style>
-  .title {
-    padding: 15px 10px;
-    text-transform: uppercase;
-    font-family: 'PT Sans', sans-serif;
-    font-size: 1.2em;
-    font-weight: 500;
-    color: #888888;
-    text-align: center;
-  }
-  </style>
-  </head>
+    <head>
+        <title>My favorite image watchface setting</title>
+        <link rel='stylesheet' type='text/css' href='css/slate.css'>
+        <script src='js/slate.js'></script>
+        <script src='js/jquery.min.js'></script>
+        <style>
+            .title {
+                padding: 15px 10px;
+                text-transform: uppercase;
+                font-family: 'PT Sans', sans-serif;
+                font-size: 1.2em;
+                font-weight: 500;
+                color: #888888;
+                text-align: center;
+            }
+        </style>
+    </head>
 
-  <body>
-    <h1 class='title'>My favorite image watchface setting</h1>
+    <body>
+        <h1 class='title'>My favorite image watchface setting</h1>
 
-    <div class='item-container'>
-      <div class='item-container-header'>Image URL</div>
-      <div class='item-container-content'>
-        <label class='item'>
-          <input type="tex" id='image_url_1'>
-        </label>
-      </div>
-      <div class='item-container-footer'>
-        Input URL(PNG, under 20KB, but all is not supported :<) 
-      </div>
-    </div>
+        <div class='item-container'>
+            <div class='item-container-header'>Image URL</div>
+            <div class='item-container-content'>
+                <label class='item'>
+                    <input type="text" id='image_url_1'>
+                </label>
+                <label class='item'>
+                    <input type="text" id='image_url_2'>
+                </label>
+                <label class='item'>
+                    <input type="text" id='image_url_3'>
+                </label>
+                <label class='item'>
+                    <input type="text" id='image_url_4'>
+                </label>
+                <label class='item'>
+                    <input type="text" id='image_url_5'>
+                </label>
+            </div>
+            <div class='item-container-footer'>
+                Input URL(PNG, under 20KB, but all is not supported :<) 
+            </div>
+        </div>
 
-    <div class='item-container'>
-      <div class='button-container'>
-        <input id='submit_button' type='button' class='item-button' value='SUBMIT'>
-      </div>
-    </div>
-  </body>
-  <script>
-  function getConfigData() {
-    var image_url_1 = document.getElementById('image_url_1');
- 
-    var options = {
-      'imageURL1': image_url_1.value
-    };
+        <div class='item-container'>
+            <div class='button-container'>
+                <input id='submit_button' type='button' class='item-button' value='SUBMIT'>
+            </div>
+        </div>
+        <script type="text/javascript">
+            function getConfigData() {
+                var image_url_1 = document.getElementById('image_url_1');
+                var image_url_2 = document.getElementById('image_url_2');
+                var image_url_3 = document.getElementById('image_url_3');
+                var image_url_4 = document.getElementById('image_url_4');
+                var image_url_5 = document.getElementById('image_url_5');
+                var options = {
+                    'imageURL1': image_url_1.value,
+                    'imageURL2': image_url_2.value,
+                    'imageURL3': image_url_3.value,
+                    'imageURL4': image_url_4.value,
+                    'imageURL5': image_url_5.value
+                };
 
-    // Save for next launch
-    localStorage['imageURL1'] = image_url_1.value;
+                // Save for next launch
+                localStorage['imageURL1'] = image_url_1.value;
+                localStorage['imageURL2'] = image_url_2.value;
+                localStorage['imageURL3'] = image_url_3.value;
+                localStorage['imageURL4'] = image_url_4.value;
+                localStorage['imageURL5'] = image_url_5.value;
 
-    console.log('Got options: ' + JSON.stringify(options));
-    return options;
-  }
+                console.log('Got options: ' + JSON.stringify(options));
+                return options;
+            }
 
-  function getQueryParam(variable, defaultValue) {
-    var query = location.search.substring(1);
-    var vars = query.split('&');
-    for (var i = 0; i < vars.length; i++) {
-      var pair = vars[i].split('=');
-      if (pair[0] === variable) {
-        return decodeURIComponent(pair[1]);
-      }
-    }
-    return defaultValue || false;
-  }
- 
-  var submitButton = document.getElementById('submit_button');
-  submitButton.addEventListener('click', function() {
-    console.log('Submit');
+            function getQueryParam(variable, defaultValue) {
+                var query = location.search.substring(1);
+                var vars = query.split('&');
+                for (var i = 0; i < vars.length; i++) {
+                    var pair = vars[i].split('=');
+                    if (pair[0] === variable) {
+                        return decodeURIComponent(pair[1]);
+                    }
+                }
+                return defaultValue || false;
+            }
 
-    // Set the return URL depending on the runtime environment
-    var return_to = getQueryParam('return_to', 'pebblejs://close#');
-    document.location = return_to + encodeURIComponent(JSON.stringify(getConfigData()));
-  });
+            var submitButton = document.getElementById('submit_button');
+            submitButton.addEventListener('click', function() {
+                console.log('Submit');
 
-  (function() {
-    var image_url_1 = document.getElementById('image_url_1');
+                // Set the return URL depending on the runtime environment
+                var return_to = getQueryParam('return_to', 'pebblejs://close#');
+                document.location = return_to + encodeURIComponent(JSON.stringify(getConfigData()));
+            });
 
-    // Load any previously saved configuration, if available
-    if(localStorage['imageURL1']) {
-      image_url_1.value = localStorage['imageURL1'];
-    }
-  })();
-  </script>
+            (function() {
+                var image_url_1 = document.getElementById('image_url_1');
+                var image_url_2 = document.getElementById('image_url_2');
+                var image_url_3 = document.getElementById('image_url_3');
+                var image_url_4 = document.getElementById('image_url_4');
+                var image_url_5 = document.getElementById('image_url_5');
+                
+                // Load any previously saved configuration, if available
+                if (localStorage['imageURL1']) {
+                    image_url_1.value = localStorage['imageURL1'];
+                }
+                if (localStorage['imageURL2']) {
+                    image_url_2.value = localStorage['imageURL2'];
+                }
+                if (localStorage['imageURL3']) {
+                    image_url_3.value = localStorage['imageURL3'];
+                }
+                if (localStorage['imageURL4']) {
+                    image_url_4.value = localStorage['imageURL4'];
+                }
+                if (localStorage['imageURL5']) {
+                    image_url_5.value = localStorage['imageURL5'];
+                }
+            })();
+        </script>
+    </body>
 </html>
