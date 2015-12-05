@@ -6,6 +6,8 @@
 #include "png.h"
 #endif
 
+#define DATA_KEY 850
+#define DATA_SIZE 849
 
 static Window *window;
 static GBitmap *current_bmp;
@@ -14,12 +16,33 @@ void show_next_image();
 void show_error_image();
 
 void set_image_url(char *data, uint number) {
-	strcpy(images[number],data);
+	strcpy(images[number], data);
 }
 
 static void window_load(Window *window) {
 	current_bmp = NULL;
 	show_mainface();
+}
+
+void read_config() {
+	char url[500];
+	uint i = 0;
+	uint size = persist_read_int(DATA_SIZE);
+	for (i = 0; i < size; i++) {
+		persist_read_string(DATA_KEY + i, url, sizeof(url));
+		set_image_url(url, i);
+		printf("%d: %s read", i, images[i]);
+	}
+}
+
+void write_config() {
+	uint i = 0;
+	for (i = 0; i < sizeof(images)/sizeof(char*); i++) {
+		persist_write_string(DATA_KEY + i, images[i]);
+		printf("%d: %s write", i, images[i]);
+	}
+	persist_write_int(DATA_SIZE, sizeof(images)/sizeof(char*));
+	
 }
 
 static void window_unload(Window *window) {
@@ -82,11 +105,13 @@ static void init(void) {
 	});
 	const bool animated = true;
 	window_stack_push(window, animated);
+	read_config();
 }
 
 static void deinit(void) {
 	netdownload_deinitialize(); // call this to avoid 20B memory leak
 	window_destroy(window);
+	write_config();
 }
 
 int main(void) {

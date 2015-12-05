@@ -14,11 +14,7 @@
 
 #define NETDL_READY NETDL_DATA + 5
 
-#define KEY_IMAGE_URL1 1001
-#define KEY_IMAGE_URL2 1002
-#define KEY_IMAGE_URL3 1003
-#define KEY_IMAGE_URL4 1004
-#define KEY_IMAGE_URL5 1005
+#define KEY_IMAGE_URL_1 1000
 
 typedef struct {
 	/* We keep a pointer to the data so we can free it later. */
