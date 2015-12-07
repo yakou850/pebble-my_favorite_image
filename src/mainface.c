@@ -38,7 +38,7 @@ static void initialise_ui(void) {
 	layer_add_child(window_get_root_layer(s_window), (Layer *)day_layer);
 
 	// weekday_layer
-	weekday_layer = text_layer_create(GRect(7, 142, 23, 18));
+	weekday_layer = text_layer_create(GRect(7, 142, 30, 18));
 	text_layer_set_background_color(weekday_layer, GColorClear);
 	text_layer_set_text(weekday_layer, "Tue");
 	text_layer_set_font(weekday_layer, s_res_gothic_14);
