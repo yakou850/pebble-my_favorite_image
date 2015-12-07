@@ -26,12 +26,13 @@ static void initialise_ui(void) {
 	s_res_font_clock = fonts_get_system_font(FONT_KEY_LECO_32_BOLD_NUMBERS);
 	#endif
 	// image_layer
-	image_layer = bitmap_layer_create(GRect(7, 1, 130, 130));
-	bitmap_layer_set_background_color(image_layer, GColorBlack);
+	image_layer = bitmap_layer_create(GRect(7, 5, 130, 150));
+	bitmap_layer_set_background_color(image_layer, GColorClear);
 	layer_add_child(window_get_root_layer(s_window), (Layer *)image_layer);
 
 	// day_layer
 	day_layer = text_layer_create(GRect(5, 126, 45, 18));
+
 	text_layer_set_background_color(day_layer, GColorClear);
 	text_layer_set_text(day_layer, "12/03");
 	text_layer_set_font(day_layer, s_res_gothic_14);
@@ -45,10 +46,10 @@ static void initialise_ui(void) {
 	layer_add_child(window_get_root_layer(s_window), (Layer *)weekday_layer);
 
 	// clock_layer
-	clock_layer = text_layer_create(GRect(35, 125, 100, 40));
-	text_layer_set_background_color(clock_layer, GColorClear);
+	clock_layer = text_layer_create(GRect(50, 125, 90, 40));
+	text_layer_set_background_color(clock_layer, GColorWhite);
 	text_layer_set_text(clock_layer, "00:00");
-	text_layer_set_text_alignment(clock_layer, GTextAlignmentRight);
+	text_layer_set_text_alignment(clock_layer, GTextAlignmentCenter);
 	text_layer_set_font(clock_layer, s_res_font_clock);
 	layer_add_child(window_get_root_layer(s_window), (Layer *)clock_layer);
 }
