@@ -16,6 +16,7 @@ Pebble.addEventListener('webviewclosed', function(e) {
 
   var dict = {};
     dict['KEY_IMAGE_URL_1'] = configData['imageURL1'];
+	dict['KEY_IMAGE_URL_2'] = configData['imageURL2'];
 
   // Send to watchapp
   Pebble.sendAppMessage(dict, function() {
@@ -39,6 +40,7 @@ Pebble.addEventListener("appmessage", function(e) {
       },
       function(e) {
         console.log("Download failed: " + e); transferInProgress = false;
+		  Pebble.sendAppMessage({"NETDL_END": "done" }, function(){}, function(){});
       });
     }
     else {

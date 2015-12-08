@@ -1,16 +1,12 @@
 #include <pebble.h>
 #include "main.h"
-void show_next_image() {
-	if (current_bmp) {
-		gbitmap_destroy(current_bmp);
-		current_bmp = NULL;
-	}
 
-	printf("%s", image);
+void show_next_image() {
 	netdownload_request(image);
 }
 
 void show_error_image() {
+	printf("download error");
 }
 
 void set_image_url_handler(char *data, uint number) {

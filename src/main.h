@@ -6,18 +6,37 @@
 #include "png.h"
 #endif
 
-#define DATA_KEY 850
 #define DATA_SIZE 849
+#define DATA_KEY 850
+#define DATA_KEY2 860
+#define DATA_KEY3 870
 
 static Window *window;
 static GBitmap *current_bmp;
-static char *image = "";
-void show_next_image();
-void show_error_image();
 static bool isReady = false;
 
+char *image;
+char *image2;
+char *image3;
+
+void show_next_image();
+void show_error_image();
+
 void set_image_url(char *data, uint number) {
-	strcpy(image, data);
+	switch (number) {
+		case 0:
+		image = malloc(sizeof(char) * (strlen(data)+1));
+		strcpy(image, data);
+		break;
+		case 1:
+		image2 = malloc(sizeof(char) * (strlen(data)+1));
+		strcpy(image2, data);
+		break;
+		case 2:
+		image3 = malloc(sizeof(char) * (strlen(data)+1));
+		strcpy(image3, data);
+		break;
+	}
 }
 
 static void window_load(Window *window) {
@@ -26,24 +45,51 @@ static void window_load(Window *window) {
 }
 
 void read_config() {
-	char *url;
-	int size_string;
+	char *url, *url2, *url3;
+	int size_string, size_string2, size_string3;
 
 	if (persist_exists(DATA_KEY)) {
 		size_string = persist_get_size(DATA_KEY);
 		url = malloc(size_string);
 		persist_read_string(DATA_KEY, url, size_string);
 		set_image_url(url, 0);
-		printf("%s read", image);
-	}		
-
+		printf("%p read", image);
+	}	
+	if (persist_exists(DATA_KEY2)) {
+		size_string2 = persist_get_size(DATA_KEY2);
+		url2 = malloc(size_string2);
+		persist_read_string(DATA_KEY2, url2, size_string2);
+		set_image_url(url2, 1);
+		printf("%p read", image2);
+	}
+	if (persist_exists(DATA_KEY3)) {
+		size_string3 = persist_get_size(DATA_KEY3);
+		url3 = malloc(size_string3);
+		persist_read_string(DATA_KEY3, url3, size_string3);
+		set_image_url(url3, 2);
+		printf("%p read", image3);
+	}
 }
 
 void write_config() {
-	uint i = 0;
-	persist_write_string(DATA_KEY, image);
-	printf("%s write", image);
-
+	if (image) {
+		persist_write_string(DATA_KEY, image);
+		printf("%s write", image);
+	} else {
+		persist_write_string(DATA_KEY, "");
+	}
+	if (image2) {
+		persist_write_string(DATA_KEY2, image2);
+		printf("%s write", image2);
+	} else {
+		persist_write_string(DATA_KEY2, "");
+	}
+	if (image3) {
+		persist_write_string(DATA_KEY3, image3);
+		printf("%s write", image3);
+	} else {
+		persist_write_string(DATA_KEY3, "");
+	}
 }
 
 static void window_unload(Window *window) {
@@ -58,6 +104,11 @@ void download_complete_handler(NetDownload *download) {
 	#else
 	GBitmap *bmp = gbitmap_create_from_png_data(download->data, download->length);
 	#endif
+
+	if (!bmp) {
+		show_error_image();
+		return;
+	}
 	set_bitmap_data(bmp);
 
 	// Save pointer to currently shown bitmap (to free it)
