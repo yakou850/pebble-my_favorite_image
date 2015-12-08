@@ -6,7 +6,9 @@
 #include "png.h"
 #endif
 
-#define DATA_SIZE 849
+#define IMAGE_MAX 5
+#define UPDATE_INTERVAL 60
+
 #define DATA_KEY 850
 #define DATA_KEY2 860
 #define DATA_KEY3 870
@@ -17,6 +19,7 @@ static Window *window;
 static GBitmap *current_bmp;
 static bool isReady = false;
 
+int update_counter = 0;
 char *image;
 char *image2;
 char *image3;
@@ -65,66 +68,56 @@ void read_config() {
 		url = malloc(size_string);
 		persist_read_string(DATA_KEY, url, size_string);
 		set_image_url(url, 0);
-		printf("%p read", image);
 	}	
 	if (persist_exists(DATA_KEY2)) {
 		size_string2 = persist_get_size(DATA_KEY2);
 		url2 = malloc(size_string2);
 		persist_read_string(DATA_KEY2, url2, size_string2);
 		set_image_url(url2, 1);
-		printf("%p read", image2);
 	}
 	if (persist_exists(DATA_KEY3)) {
 		size_string3 = persist_get_size(DATA_KEY3);
 		url3 = malloc(size_string3);
 		persist_read_string(DATA_KEY3, url3, size_string3);
 		set_image_url(url3, 2);
-		printf("%p read", image3);
 	}
 	if (persist_exists(DATA_KEY4)) {
 		size_string4 = persist_get_size(DATA_KEY4);
 		url4 = malloc(size_string4);
 		persist_read_string(DATA_KEY4, url4, size_string4);
 		set_image_url(url4, 3);
-		printf("%p read", image4);
 	}
 	if (persist_exists(DATA_KEY5)) {
 		size_string5 = persist_get_size(DATA_KEY5);
 		url5 = malloc(size_string5);
 		persist_read_string(DATA_KEY5, url5, size_string5);
 		set_image_url(url5, 4);
-		printf("%p read", image5);
 	}
 }
 
 void write_config() {
 	if (image) {
 		persist_write_string(DATA_KEY, image);
-		printf("%s write", image);
 	} else {
 		persist_write_string(DATA_KEY, "");
 	}
 	if (image2) {
 		persist_write_string(DATA_KEY2, image2);
-		printf("%s write", image2);
 	} else {
 		persist_write_string(DATA_KEY2, "");
 	}
 	if (image3) {
 		persist_write_string(DATA_KEY3, image3);
-		printf("%s write", image3);
 	} else {
 		persist_write_string(DATA_KEY3, "");
 	}
 	if (image4) {
 		persist_write_string(DATA_KEY4, image4);
-		printf("%s write", image4);
 	} else {
 		persist_write_string(DATA_KEY4, "");
 	}
 	if (image5) {
 		persist_write_string(DATA_KEY5, image5);
-		printf("%s write", image5);
 	} else {
 		persist_write_string(DATA_KEY5, "");
 	}
@@ -136,6 +129,13 @@ static void window_unload(Window *window) {
 }
 
 void download_complete_handler(NetDownload *download) {
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Heap Used: %d, Free: %d ", heap_bytes_used(), heap_bytes_free());
+	if (current_bmp) {
+		gbitmap_destroy(current_bmp);
+		current_bmp = NULL;
+	}
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Heap Used: %d, Free: %d ", heap_bytes_used(), heap_bytes_free());
+
 
 	#ifdef PBL_PLATFORM_APLITE
 	GBitmap *bmp = gbitmap_create_with_png_data(download->data, download->length);
@@ -147,12 +147,10 @@ void download_complete_handler(NetDownload *download) {
 		show_error_image();
 		return;
 	}
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Heap Used: %d, Free: %d ", heap_bytes_used(), heap_bytes_free());
 	set_bitmap_data(bmp);
 
 	// Save pointer to currently shown bitmap (to free it)
-	if (current_bmp) {
-		gbitmap_destroy(current_bmp);
-	}
 	current_bmp = bmp;
 
 	// Free the memory now
@@ -165,7 +163,7 @@ void download_complete_handler(NetDownload *download) {
 	download->data = NULL;
 	netdownload_destroy(download);
 
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "show image");
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Heap Used: %d, Free: %d ", heap_bytes_used(), heap_bytes_free());
 }
 
 void download_ready_handler() {
@@ -180,6 +178,16 @@ void download_error_handler() {
 }
 
 void set_image_url_handler(char *data, uint number);
+
+void tick_image_handler(struct tm *tick_time, TimeUnits units_changed) {	
+	update_time();
+
+	update_counter++;
+	if (update_counter == UPDATE_INTERVAL) {
+		show_next_image();
+		update_counter = 0;
+	}
+}
 
 static void init(void) {
 	// Need to initialize this first to make sure it is there when
@@ -197,6 +205,8 @@ static void init(void) {
 	const bool animated = true;
 	window_stack_push(window, animated);
 	read_config();
+
+	tick_timer_service_subscribe(MINUTE_UNIT, tick_image_handler);
 }
 
 static void deinit(void) {

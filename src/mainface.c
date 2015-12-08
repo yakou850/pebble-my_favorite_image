@@ -68,10 +68,6 @@ static void handle_window_unload(Window* window) {
 }
 
 
-void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
-	update_time();
-}
-
 void show_mainface(void) {
 	initialise_ui();
 	window_set_window_handlers(s_window, (WindowHandlers) {
@@ -79,7 +75,6 @@ void show_mainface(void) {
 	});
 	window_stack_push(s_window, true);
 
-	tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
 	update_time();
 }
 

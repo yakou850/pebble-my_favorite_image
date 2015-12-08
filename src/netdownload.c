@@ -44,7 +44,11 @@ void netdownload_deinitialize() {
 }
 
 void netdownload_request(char *url) {
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "download = %s", url);
+	//APP_LOG(APP_LOG_LEVEL_DEBUG, "download = %s", url);
+	if (!url || strlen(url) == 0) {
+		APP_LOG(APP_LOG_LEVEL_DEBUG, "skip");
+		return;
+	}
 
 	DictionaryIterator *outbox;
 	app_message_outbox_begin(&outbox);
@@ -77,23 +81,18 @@ void netdownload_receive(DictionaryIterator *iter, void *context) {
 	Tuple *url5 = dict_find(iter, KEY_IMAGE_URL_5);
 	if (url1 || url2 || url3 || url4 || url5) {
 		if (url1) {
-			printf("Get string: %s", url1->value->cstring);
 			ctx->callback_set_image_url(url1->value->cstring, 0);
 		}
 		if (url2) {
-			printf("Get string: %s", url2->value->cstring);
 			ctx->callback_set_image_url(url2->value->cstring, 1);
 		}
 		if (url3) {
-			printf("Get string: %s", url3->value->cstring);
 			ctx->callback_set_image_url(url3->value->cstring, 2);
 		}
 		if (url4) {
-			printf("Get string: %s", url4->value->cstring);
 			ctx->callback_set_image_url(url4->value->cstring, 3);
 		}
 		if (url5) {
-			printf("Get string: %s", url5->value->cstring);
 			ctx->callback_set_image_url(url5->value->cstring, 4);
 		}
 		return;
@@ -137,7 +136,6 @@ void netdownload_receive(DictionaryIterator *iter, void *context) {
 			image->data = ctx->data;
 			image->length = ctx->length;
 
-			printf("Received file of size=%lu and address=%p", ctx->length, ctx->data);
 			ctx->callback(image);
 
 			// We have transfered ownership of this memory to the app. Make sure we dont free it.
