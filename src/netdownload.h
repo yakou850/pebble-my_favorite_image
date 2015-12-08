@@ -17,6 +17,8 @@
 #define KEY_IMAGE_URL_1 1000
 #define KEY_IMAGE_URL_2 1001
 #define KEY_IMAGE_URL_3 1002
+#define KEY_IMAGE_URL_4 1003
+#define KEY_IMAGE_URL_5 1004
 
 typedef struct {
 	/* We keep a pointer to the data so we can free it later. */

@@ -73,7 +73,9 @@ void netdownload_receive(DictionaryIterator *iter, void *context) {
 	Tuple *url1 = dict_find(iter, KEY_IMAGE_URL_1);
 	Tuple *url2 = dict_find(iter, KEY_IMAGE_URL_2);
 	Tuple *url3 = dict_find(iter, KEY_IMAGE_URL_3);
-	if (url1 || url2 || url3) {
+	Tuple *url4 = dict_find(iter, KEY_IMAGE_URL_4);
+	Tuple *url5 = dict_find(iter, KEY_IMAGE_URL_5);
+	if (url1 || url2 || url3 || url4 || url5) {
 		if (url1) {
 			printf("Get string: %s", url1->value->cstring);
 			ctx->callback_set_image_url(url1->value->cstring, 0);
@@ -85,6 +87,14 @@ void netdownload_receive(DictionaryIterator *iter, void *context) {
 		if (url3) {
 			printf("Get string: %s", url3->value->cstring);
 			ctx->callback_set_image_url(url3->value->cstring, 2);
+		}
+		if (url4) {
+			printf("Get string: %s", url4->value->cstring);
+			ctx->callback_set_image_url(url4->value->cstring, 3);
+		}
+		if (url5) {
+			printf("Get string: %s", url5->value->cstring);
+			ctx->callback_set_image_url(url5->value->cstring, 4);
 		}
 		return;
 	}

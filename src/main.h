@@ -10,6 +10,8 @@
 #define DATA_KEY 850
 #define DATA_KEY2 860
 #define DATA_KEY3 870
+#define DATA_KEY4 880
+#define DATA_KEY5 890
 
 static Window *window;
 static GBitmap *current_bmp;
@@ -18,6 +20,8 @@ static bool isReady = false;
 char *image;
 char *image2;
 char *image3;
+char *image4;
+char *image5;
 
 void show_next_image();
 void show_error_image();
@@ -36,6 +40,14 @@ void set_image_url(char *data, uint number) {
 		image3 = malloc(sizeof(char) * (strlen(data)+1));
 		strcpy(image3, data);
 		break;
+		case 3:
+		image4 = malloc(sizeof(char) * (strlen(data)+1));
+		strcpy(image4, data);
+		break;
+		case 4:
+		image5 = malloc(sizeof(char) * (strlen(data)+1));
+		strcpy(image5, data);
+		break;
 	}
 }
 
@@ -45,8 +57,8 @@ static void window_load(Window *window) {
 }
 
 void read_config() {
-	char *url, *url2, *url3;
-	int size_string, size_string2, size_string3;
+	char *url, *url2, *url3, *url4, *url5;
+	int size_string, size_string2, size_string3, size_string4, size_string5;
 
 	if (persist_exists(DATA_KEY)) {
 		size_string = persist_get_size(DATA_KEY);
@@ -69,6 +81,20 @@ void read_config() {
 		set_image_url(url3, 2);
 		printf("%p read", image3);
 	}
+	if (persist_exists(DATA_KEY4)) {
+		size_string4 = persist_get_size(DATA_KEY4);
+		url4 = malloc(size_string4);
+		persist_read_string(DATA_KEY4, url4, size_string4);
+		set_image_url(url4, 3);
+		printf("%p read", image4);
+	}
+	if (persist_exists(DATA_KEY5)) {
+		size_string5 = persist_get_size(DATA_KEY5);
+		url5 = malloc(size_string5);
+		persist_read_string(DATA_KEY5, url5, size_string5);
+		set_image_url(url5, 4);
+		printf("%p read", image5);
+	}
 }
 
 void write_config() {
@@ -89,6 +115,18 @@ void write_config() {
 		printf("%s write", image3);
 	} else {
 		persist_write_string(DATA_KEY3, "");
+	}
+	if (image4) {
+		persist_write_string(DATA_KEY4, image4);
+		printf("%s write", image4);
+	} else {
+		persist_write_string(DATA_KEY4, "");
+	}
+	if (image5) {
+		persist_write_string(DATA_KEY5, image5);
+		printf("%s write", image5);
+	} else {
+		persist_write_string(DATA_KEY5, "");
 	}
 }
 

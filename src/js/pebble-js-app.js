@@ -17,6 +17,9 @@ Pebble.addEventListener('webviewclosed', function(e) {
   var dict = {};
     dict['KEY_IMAGE_URL_1'] = configData['imageURL1'];
 	dict['KEY_IMAGE_URL_2'] = configData['imageURL2'];
+	dict['KEY_IMAGE_URL_3'] = configData['imageURL3'];
+	dict['KEY_IMAGE_URL_4'] = configData['imageURL4'];
+	dict['KEY_IMAGE_URL_5'] = configData['imageURL5'];
 
   // Send to watchapp
   Pebble.sendAppMessage(dict, function() {
