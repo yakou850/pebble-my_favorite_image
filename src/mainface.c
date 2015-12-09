@@ -53,6 +53,8 @@ static void initialise_ui(void) {
 	text_layer_set_text_alignment(clock_layer, GTextAlignmentCenter);
 	text_layer_set_font(clock_layer, s_res_font_clock);
 	layer_add_child(window_get_root_layer(s_window), (Layer *)clock_layer);
+	
+	gdraw_
 }
 
 static void destroy_ui(void) {
