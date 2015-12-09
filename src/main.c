@@ -4,25 +4,30 @@
 int image_counter = 0;
 
 void show_next_image() {
-	if (image_counter == 0) {
-		netdownload_request(image);
-		image_counter++;
-	} else if (image_counter == 1) {
-		netdownload_request(image2);
-		image_counter++;
-	} else if (image_counter == 2) {
-		netdownload_request(image3);
-		image_counter++;
-	} else if (image_counter == 3) {
-		netdownload_request(image4);
-		image_counter++;
-	} else if (image_counter == 4) {
-		netdownload_request(image5);
-		image_counter++;
-	}
+	char *image_current;
+	for (int i=0; i< IMAGE_MAX; i++) {
 
-	if (image_counter >= IMAGE_MAX) {
-		image_counter = 0;
+		if (image_counter == 0) {
+			image_current = image;
+		} else if (image_counter == 1) {
+			image_current = image2;
+		} else if (image_counter == 2) {
+			image_current = image3;
+		} else if (image_counter == 3) {
+			image_current = image4;		
+		} else if (image_counter == 4) {
+			image_current = image5;
+		}
+		image_counter++;
+		if (image_counter >= IMAGE_MAX) {
+			image_counter = 0;
+		}
+		if (image_current && strlen(image_current) > 0) {
+			break;
+		}
+	}
+	if (image_current && strlen(image_current) > 0) {
+		netdownload_request(image_current);
 	}
 }
 
