@@ -25,11 +25,10 @@
     "sdkVersion": "3",
     "shortName": "MyFavImg",
     "targetPlatforms": [
-        "aplite",
         "basalt"
     ],
     "uuid": "c5fdb967-3128-4989-9280-80ea46797815",
-    "versionLabel": "1.0",
+    "versionLabel": "1.1",
     "watchapp": {
         "watchface": true
     }

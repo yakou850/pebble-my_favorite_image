@@ -9,6 +9,7 @@ static BitmapLayer *image_layer;
 static TextLayer *day_layer;
 static TextLayer *weekday_layer;
 static TextLayer *clock_layer;
+static bool isBlack = true;
 
 static void initialise_ui(void) {
 	s_window = window_create();
@@ -26,7 +27,7 @@ static void initialise_ui(void) {
 	s_res_font_clock = fonts_get_system_font(FONT_KEY_LECO_32_BOLD_NUMBERS);
 	#endif
 	// image_layer
-	image_layer = bitmap_layer_create(GRect(7, 5, 130, 150));
+	image_layer = bitmap_layer_create(GRect(0, 0, 144, 168));
 	bitmap_layer_set_background_color(image_layer, GColorClear);
 	layer_add_child(window_get_root_layer(s_window), (Layer *)image_layer);
 
@@ -109,5 +110,14 @@ void update_time(void) {
 		strftime(buffer, sizeof("00:00"), "%I:%M", tick_time);
 	}
 	text_layer_set_text(clock_layer, buffer);
+	
+	if (isBlack) {
+		text_layer_set_text_color(day_layer, GColorBlack);
+		text_layer_set_text_color(weekday_layer, GColorBlack);
+	} else {
+		text_layer_set_text_color(day_layer, GColorWhite);
+		text_layer_set_text_color(weekday_layer, GColorWhite);
+	}
+	isBlack = !isBlack;
 }
 

@@ -7,8 +7,9 @@
 #endif
 
 #define IMAGE_MAX 5
-#define UPDATE_INTERVAL 60
+#define UPDATE_INTERVAL 20
 
+#define DATA_UPDATE_INTERVAL 700
 #define DATA_KEY 850
 #define DATA_KEY2 860
 #define DATA_KEY3 870
@@ -18,6 +19,7 @@
 static Window *window;
 static GBitmap *current_bmp;
 static bool isReady = false;
+static int update_interval = UPDATE_INTERVAL;
 
 int update_counter = 0;
 char *image;
@@ -93,6 +95,9 @@ void read_config() {
 		persist_read_string(DATA_KEY5, url5, size_string5);
 		set_image_url(url5, 4);
 	}
+	if (persist_exists(DATA_UPDATE_INTERVAL)) {
+		//update_interval = persist_read_int(DATA_UPDATE_INTERVAL);
+	}
 }
 
 void write_config() {
@@ -121,6 +126,7 @@ void write_config() {
 	} else {
 		persist_write_string(DATA_KEY5, "");
 	}
+	persist_write_int(DATA_UPDATE_INTERVAL, update_interval);
 }
 
 static void window_unload(Window *window) {
@@ -183,7 +189,7 @@ void tick_image_handler(struct tm *tick_time, TimeUnits units_changed) {
 	update_time();
 
 	update_counter++;
-	if (update_counter == UPDATE_INTERVAL) {
+	if (update_counter == update_interval) {
 		show_next_image();
 		update_counter = 0;
 	}
