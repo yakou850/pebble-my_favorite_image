@@ -14,6 +14,7 @@
 
 #define NETDL_READY NETDL_DATA + 5
 
+#define KEY_UPDATE_INTERVAL 950
 #define KEY_IMAGE_URL_1 1000
 #define KEY_IMAGE_URL_2 1001
 #define KEY_IMAGE_URL_3 1002
@@ -30,6 +31,7 @@ typedef struct {
 typedef void (*NetDownloadCallback)(NetDownload *image);
 typedef void (*NetDownloadCallback2)();
 typedef void (*NetDownloadCallback3)(char *data, uint number);
+typedef void (*NetDownloadCallback4)(uint8_t number);
 
 typedef struct {
 	/* size of the data buffer allocated */
@@ -42,9 +44,10 @@ typedef struct {
 	NetDownloadCallback callback;
 	NetDownloadCallback2 callback_error;
 	NetDownloadCallback3 callback_set_image_url;
+	NetDownloadCallback4 callback_set_update_interval;
 } NetDownloadContext;
 
-NetDownloadContext* netdownload_create_context(NetDownloadCallback callback, NetDownloadCallback2 callback_ready, NetDownloadCallback2 callback_error, NetDownloadCallback3 callback_set_image_url);
+NetDownloadContext* netdownload_create_context(NetDownloadCallback callback, NetDownloadCallback2 callback_ready, NetDownloadCallback2 callback_error, NetDownloadCallback3 callback_set_image_url, NetDownloadCallback4 callback_set_update_interval);
 
 void netdownload_initialize();
 void netdownload_deinitialize();

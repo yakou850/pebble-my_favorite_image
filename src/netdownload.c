@@ -2,7 +2,12 @@
 
 #define MIN(a,b)  ((a) < (b) ? (a) : (b))
 
-NetDownloadContext* netdownload_create_context(NetDownloadCallback callback, NetDownloadCallback2 callback_ready, NetDownloadCallback2 callback_error, NetDownloadCallback3 callback_set_image_url) {
+NetDownloadContext* netdownload_create_context(
+	NetDownloadCallback callback, 
+	NetDownloadCallback2 callback_ready, 
+	NetDownloadCallback2 callback_error, 
+	NetDownloadCallback3 callback_set_image_url, 
+	NetDownloadCallback4 callback_set_update_interval) {
 	NetDownloadContext *ctx = malloc(sizeof(NetDownloadContext));
 
 	ctx->length = 0;
@@ -12,6 +17,7 @@ NetDownloadContext* netdownload_create_context(NetDownloadCallback callback, Net
 	ctx->callback_ready = callback_ready;
 	ctx->callback_error = callback_error;
 	ctx->callback_set_image_url = callback_set_image_url;
+	ctx->callback_set_update_interval = callback_set_update_interval;
 
 	return ctx;
 }
@@ -23,8 +29,13 @@ void netdownload_destroy_context(NetDownloadContext *ctx) {
 	free(ctx);
 }
 
-void netdownload_initialize(NetDownloadCallback callback, NetDownloadCallback callback_ready, NetDownloadCallback callback_error, NetDownloadCallback3 callback_set_image_url) {
-	NetDownloadContext *ctx = netdownload_create_context(callback, callback_ready, callback_error, callback_set_image_url);
+void netdownload_initialize(
+	NetDownloadCallback callback, 
+	NetDownloadCallback2 callback_ready, 
+	NetDownloadCallback2 callback_error, 
+	NetDownloadCallback3 callback_set_image_url, 
+	NetDownloadCallback4 callback_set_update_interval) {
+	NetDownloadContext *ctx = netdownload_create_context(callback, callback_ready, callback_error, callback_set_image_url, callback_set_update_interval);
 	APP_LOG(APP_LOG_LEVEL_DEBUG, "NetDownloadContext = %p", ctx);
 	app_message_set_context(ctx);
 
@@ -79,7 +90,8 @@ void netdownload_receive(DictionaryIterator *iter, void *context) {
 	Tuple *url3 = dict_find(iter, KEY_IMAGE_URL_3);
 	Tuple *url4 = dict_find(iter, KEY_IMAGE_URL_4);
 	Tuple *url5 = dict_find(iter, KEY_IMAGE_URL_5);
-	if (url1 || url2 || url3 || url4 || url5) {
+	Tuple *update_interval = dict_find(iter, KEY_UPDATE_INTERVAL);
+	if (url1 || url2 || url3 || url4 || url5 || update_interval) {
 		if (url1) {
 			ctx->callback_set_image_url(url1->value->cstring, 0);
 		}
@@ -94,6 +106,9 @@ void netdownload_receive(DictionaryIterator *iter, void *context) {
 		}
 		if (url5) {
 			ctx->callback_set_image_url(url5->value->cstring, 4);
+		}
+		if (update_interval) {
+			ctx->callback_set_update_interval(atoi(update_interval->value->cstring));
 		}
 		return;
 	}

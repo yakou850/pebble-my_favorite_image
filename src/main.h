@@ -96,7 +96,8 @@ void read_config() {
 		set_image_url(url5, 4);
 	}
 	if (persist_exists(DATA_UPDATE_INTERVAL)) {
-		//update_interval = persist_read_int(DATA_UPDATE_INTERVAL);
+		update_interval = persist_read_int(DATA_UPDATE_INTERVAL);
+		printf("update_interval read %d" , update_interval);
 	}
 }
 
@@ -185,11 +186,15 @@ void download_error_handler() {
 
 void set_image_url_handler(char *data, uint number);
 
+void set_update_interval_handler(uint8_t interval) {
+	update_interval = (int)interval;
+}
+
 void tick_image_handler(struct tm *tick_time, TimeUnits units_changed) {	
 	update_time();
 
 	update_counter++;
-	if (update_counter == update_interval) {
+	if (update_counter >= update_interval) {
 		show_next_image();
 		update_counter = 0;
 	}
@@ -198,7 +203,7 @@ void tick_image_handler(struct tm *tick_time, TimeUnits units_changed) {
 static void init(void) {
 	// Need to initialize this first to make sure it is there when
 	// the window_load function is called by window_stack_push.
-	netdownload_initialize(download_complete_handler, download_ready_handler, download_error_handler, set_image_url_handler);
+	netdownload_initialize(download_complete_handler, download_ready_handler, download_error_handler, set_image_url_handler, set_update_interval_handler);
 
 	window = window_create();
 	#ifdef PBL_SDK_2
