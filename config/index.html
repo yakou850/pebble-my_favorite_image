@@ -44,6 +44,21 @@
                 Input URL(PNG, under 20KB, but all is not supported :<) 
             </div>
         </div>
+        
+    <div class="item-container">
+      <div class="item-container-header">Update Interval</div>
+      <div class="item-container-content">
+        <label class="item">
+          Example Item
+          <select name="updateinterval" dir='rtl' class="item-select">
+            <option class="item-select-option" value="1">1 minute</option>
+            <option class="item-select-option" value="10">10 minutes</option>
+            <option class="item-select-option" selected value="20">20 minutes</option>
+            <option class="item-select-option" value="60">1 hour</option>
+          </select>
+        </label>
+      </div>
+    </div>
 
         <div class='item-container'>
             <div class='button-container'>
@@ -57,12 +72,14 @@
                 var image_url_3 = document.getElementById('image_url_3');
                 var image_url_4 = document.getElementById('image_url_4');
                 var image_url_5 = document.getElementById('image_url_5');
+                var updateInterval = $('select[name=updateinterval]').val();
                 var options = {
                     'imageURL1': image_url_1.value,
                     'imageURL2': image_url_2.value,
                     'imageURL3': image_url_3.value,
                     'imageURL4': image_url_4.value,
-                    'imageURL5': image_url_5.value
+                    'imageURL5': image_url_5.value,
+                    'updateInterval' : updateInterval
                 };
 
                 // Save for next launch
@@ -71,6 +88,7 @@
                 localStorage['imageURL3'] = image_url_3.value;
                 localStorage['imageURL4'] = image_url_4.value;
                 localStorage['imageURL5'] = image_url_5.value;
+                localStorage['updateinterval'] = updateInterval;
 
                 console.log('Got options: ' + JSON.stringify(options));
                 return options;
@@ -119,6 +137,9 @@
                 }
                 if (localStorage['imageURL5']) {
                     image_url_5.value = localStorage['imageURL5'];
+                }
+                if (localStorage['updateinterval']) {
+                    $('select[name=updateinterval]').val(localStorage['updateinterval']);
                 }
             })();
         </script>
