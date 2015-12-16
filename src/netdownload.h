@@ -15,6 +15,7 @@
 #define NETDL_READY NETDL_DATA + 5
 
 #define KEY_UPDATE_INTERVAL 950
+#define KEY_CONFIG_ERROR_URL_REMOVE 960
 #define KEY_IMAGE_URL_1 1000
 #define KEY_IMAGE_URL_2 1001
 #define KEY_IMAGE_URL_3 1002
@@ -31,7 +32,7 @@ typedef struct {
 typedef void (*NetDownloadCallback)(NetDownload *image);
 typedef void (*NetDownloadCallback2)();
 typedef void (*NetDownloadCallback3)(char *data, uint number);
-typedef void (*NetDownloadCallback4)(uint8_t number);
+typedef void (*NetDownloadCallback4)(uint8_t number, bool error_url_remove);
 
 typedef struct {
 	/* size of the data buffer allocated */

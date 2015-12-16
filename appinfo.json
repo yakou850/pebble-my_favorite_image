@@ -1,6 +1,7 @@
 {
     "appKeys": {
         "DATA_KEY": 850,
+        "KEY_CONFIG_ERROR_URL_REMOVE": 960,
         "KEY_IMAGE_URL_1": 1000,
         "KEY_IMAGE_URL_2": 1001,
         "KEY_IMAGE_URL_3": 1002,
@@ -29,7 +30,7 @@
         "basalt"
     ],
     "uuid": "c5fdb967-3128-4989-9280-80ea46797815",
-    "versionLabel": "1.3",
+    "versionLabel": "1.4",
     "watchapp": {
         "watchface": true
     }

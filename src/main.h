@@ -10,6 +10,7 @@
 #define UPDATE_INTERVAL 20
 
 #define DATA_UPDATE_INTERVAL 700
+#define DATA_CONFIG_ERROR_URL_REMOVE 710
 #define DATA_KEY 850
 #define DATA_KEY2 860
 #define DATA_KEY3 870
@@ -20,6 +21,7 @@ static Window *window;
 static GBitmap *current_bmp;
 static bool isReady = false;
 static int update_interval = UPDATE_INTERVAL;
+static bool error_url_remove = true;
 
 int update_counter = 0;
 char *image;
@@ -97,7 +99,9 @@ void read_config() {
 	}
 	if (persist_exists(DATA_UPDATE_INTERVAL)) {
 		update_interval = persist_read_int(DATA_UPDATE_INTERVAL);
-		printf("update_interval read %d" , update_interval);
+	}
+	if (persist_exists(DATA_CONFIG_ERROR_URL_REMOVE)) {
+		error_url_remove = persist_read_bool(DATA_CONFIG_ERROR_URL_REMOVE);
 	}
 }
 
@@ -128,6 +132,7 @@ void write_config() {
 		persist_write_string(DATA_KEY5, "");
 	}
 	persist_write_int(DATA_UPDATE_INTERVAL, update_interval);
+	persist_write_bool(DATA_CONFIG_ERROR_URL_REMOVE, error_url_remove);
 }
 
 static void window_unload(Window *window) {
@@ -186,8 +191,9 @@ void download_error_handler() {
 
 void set_image_url_handler(char *data, uint number);
 
-void set_update_interval_handler(uint8_t interval) {
+void set_update_interval_handler(uint8_t interval, bool flag) {
 	update_interval = (int)interval;
+	error_url_remove = flag;
 }
 
 void tick_image_handler(struct tm *tick_time, TimeUnits units_changed) {	

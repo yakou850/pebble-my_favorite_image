@@ -91,7 +91,8 @@ void netdownload_receive(DictionaryIterator *iter, void *context) {
 	Tuple *url4 = dict_find(iter, KEY_IMAGE_URL_4);
 	Tuple *url5 = dict_find(iter, KEY_IMAGE_URL_5);
 	Tuple *update_interval = dict_find(iter, KEY_UPDATE_INTERVAL);
-	if (url1 || url2 || url3 || url4 || url5 || update_interval) {
+	Tuple *error_url_remove = dict_find(iter, KEY_CONFIG_ERROR_URL_REMOVE);
+	if (url1 || url2 || url3 || url4 || url5 || update_interval || error_url_remove) {
 		if (url1) {
 			ctx->callback_set_image_url(url1->value->cstring, 0);
 		}
@@ -107,8 +108,10 @@ void netdownload_receive(DictionaryIterator *iter, void *context) {
 		if (url5) {
 			ctx->callback_set_image_url(url5->value->cstring, 4);
 		}
-		if (update_interval) {
-			ctx->callback_set_update_interval(atoi(update_interval->value->cstring));
+		if (update_interval && error_url_remove) {
+			ctx->callback_set_update_interval(atoi(update_interval->value->cstring), (error_url_remove->value->int8 > 0));
+		} else if (update_interval) {
+			ctx->callback_set_update_interval(atoi(update_interval->value->cstring), true);
 		}
 		return;
 	}

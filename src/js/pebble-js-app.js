@@ -21,6 +21,7 @@ Pebble.addEventListener('webviewclosed', function(e) {
 	dict['KEY_IMAGE_URL_4'] = configData['imageURL4'];
 	dict['KEY_IMAGE_URL_5'] = configData['imageURL5'];
 	dict['KEY_UPDATE_INTERVAL'] = configData['updateInterval'];
+	dict['KEY_CONFIG_ERROR_URL_REMOVE'] = configData['error_url_remove'];
 
   // Send to watchapp
   Pebble.sendAppMessage(dict, function() {

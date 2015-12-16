@@ -32,6 +32,9 @@ void show_next_image() {
 }
 
 void show_error_image() {
+	if (!error_url_remove) {
+		return;
+	}
 	switch (image_counter) {
 		case 1: image = NULL; break;
 		case 2: image2 = NULL; break;
@@ -45,7 +48,4 @@ void show_error_image() {
 void set_image_url_handler(char *data, uint number) {
 	set_image_url(data, number);
 	write_config();
-	if (number == 0) {
-		//		show_next_image();
-	}
 }
