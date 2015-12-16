@@ -59,6 +59,12 @@
         </label>
       </div>
     </div>
+    
+    <div class='item-container'>
+            <div class='button-container'>
+                <input id='error_url_remove_checkbox' type='checkbox' class='item-toggle' checked="checked">
+            </div>
+        </div>
 
         <div class='item-container'>
             <div class='button-container'>
@@ -73,13 +79,16 @@
                 var image_url_4 = document.getElementById('image_url_4');
                 var image_url_5 = document.getElementById('image_url_5');
                 var updateInterval = $('select[name=updateinterval]').val();
+                var error_url_remove = document.getElementById('error_url_remove_checkbox');
+                
                 var options = {
                     'imageURL1': image_url_1.value,
                     'imageURL2': image_url_2.value,
                     'imageURL3': image_url_3.value,
                     'imageURL4': image_url_4.value,
                     'imageURL5': image_url_5.value,
-                    'updateInterval' : updateInterval
+                    'updateInterval' : updateInterval,
+                    'error_url_remove': error_url_remove.checked
                 };
 
                 // Save for next launch
@@ -89,6 +98,7 @@
                 localStorage['imageURL4'] = image_url_4.value;
                 localStorage['imageURL5'] = image_url_5.value;
                 localStorage['updateinterval'] = updateInterval;
+                localStorage['errorUrlRemove'] = error_url_remove.checked;
 
                 console.log('Got options: ' + JSON.stringify(options));
                 return options;
@@ -121,6 +131,7 @@
                 var image_url_3 = document.getElementById('image_url_3');
                 var image_url_4 = document.getElementById('image_url_4');
                 var image_url_5 = document.getElementById('image_url_5');
+                var error_url_remove = document.getElementById('error_url_remove_checkbox');
                 
                 // Load any previously saved configuration, if available
                 if (localStorage['imageURL1']) {
@@ -140,6 +151,9 @@
                 }
                 if (localStorage['updateinterval']) {
                     $('select[name=updateinterval]').val(localStorage['updateinterval']);
+                }
+                if (localStorage['errorUrlRemove']) {
+                    error_url_remove.checked = JSON.parse(localStorage['errorUrlRemove']);
                 }
             })();
         </script>
